@@ -8,7 +8,11 @@ builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddDbContext<EstateFlowDbContext>(options => options.UseNpgsql("EstateFlowDbConnection"));
+builder.Services.AddDbContext<EstateFlowDbContext>(
+    options => options.UseNpgsql(
+        builder.Configuration.GetConnectionString("EstateFlowDbConnection")
+    )
+);
 
 var app = builder.Build();
 
