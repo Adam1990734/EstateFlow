@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="estateflow.client/estateflow.client.esproj">
+    <Build />
+    <Deploy />
+  </Project>
+  <Project Path="EstateFlow.Server/EstateFlow.Server.csproj" />
+</Solution>
