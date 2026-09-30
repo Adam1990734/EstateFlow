@@ -8,6 +8,8 @@ public class EstateFlowDbContext : DbContext
     public DbSet<Property> Properties => Set<Property>();
     public DbSet<PropertyImage> PropertyImages => Set<PropertyImage>();
     public DbSet<Meter> Meters => Set<Meter>();
+    public DbSet<UtilityType> UtilityTypes => Set<UtilityType>();
+    public DbSet<Provider> Provider => Set<Provider>();
     public EstateFlowDbContext(DbContextOptions<EstateFlowDbContext> options) : base(options) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
