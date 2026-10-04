@@ -25,11 +25,17 @@ public class EstateFlowDbContext : DbContext
                     .WithMany()
                     .HasForeignKey(m => m.UtilityTypeId)
                     .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Meter>()
+                    .HasOne(m => m.Provider)
+                    .WithMany()
+                    .HasForeignKey(m => m.ProviderId)
+                    .OnDelete(DeleteBehavior.Restrict);
         modelBuilder.Entity<Provider>()
                     .HasOne(p => p.UtilityType)
                     .WithMany(t => t.Providers)
                     .HasForeignKey(p => p.UtilityTypeId)
                     .OnDelete(DeleteBehavior.Restrict);
+
         modelBuilder.Entity<MeterReading>()
                     .HasOne(r => r.Meter)
                     .WithMany(m => m.Readings)
@@ -48,6 +54,7 @@ public class EstateFlowDbContext : DbContext
             new City { Id = 3, Name = "Szeged" },
             new City { Id = 4, Name = "Kecskemét" }
         );
+
         modelBuilder.Entity<Property>().HasData(
             new Property
             {
@@ -56,7 +63,7 @@ public class EstateFlowDbContext : DbContext
                 Name = "Szondi utcai lakás",
                 Address = "1068 Budapest, Szondi utca 45.",
                 SquareMeters = 54,
-                AdvertisementText = "Világos, felújított másfél szobás lakás a VI. kerület szív",
+                AdvertisementText = "Világos, felújított másfél szobás lakás a VI. kerület szívében",
                 CityId = 1
             },
             new Property
@@ -80,6 +87,7 @@ public class EstateFlowDbContext : DbContext
                 CityId = 2
             }
         );
+
         modelBuilder.Entity<PropertyImage>().HasData(
             new PropertyImage
             {
@@ -127,7 +135,8 @@ public class EstateFlowDbContext : DbContext
             {
                 Id = 2,
                 Name = "FŐGÁZ",
-                Note = "a gázórákat évente egyszer olvassák"
+                Note = "a gázórákat évente egyszer olvassák",
+                UtilityTypeId = 1
             },
             new Provider { Id = 3, Name = "Fővárosi Vízművek", Note = null, UtilityTypeId = 3 },
             new Provider { Id = 4, Name = "Debreceni Vízmű", Note = null, UtilityTypeId = 3 }
