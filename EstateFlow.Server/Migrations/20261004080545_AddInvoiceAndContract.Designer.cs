@@ -3,6 +3,7 @@ using System;
 using EstateFlow.Server.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace EstateFlow.Server.Migrations
 {
     [DbContext(typeof(EstateFlowDbContext))]
-    partial class EstateFlowDbContextModelSnapshot : ModelSnapshot
+    [Migration("20261004080545_AddInvoiceAndContract")]
+    partial class AddInvoiceAndContract
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

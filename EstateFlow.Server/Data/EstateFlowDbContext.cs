@@ -13,6 +13,8 @@ public class EstateFlowDbContext : DbContext
     public DbSet<MeterReading> MetersReading => Set<MeterReading>();
     public DbSet<Tenant> Tenants => Set<Tenant>();
     public DbSet<Rental> Rentals => Set<Rental>();
+    public DbSet<Invoice> Invoices => Set<Invoice>();
+    public DbSet<Contract> Contracts => Set<Contract>();
     public EstateFlowDbContext(DbContextOptions<EstateFlowDbContext> options) : base(options) { }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -47,6 +49,23 @@ public class EstateFlowDbContext : DbContext
         modelBuilder.Entity<MeterReading>()
                     .Property(r => r.Value)
                     .HasPrecision(18, 3);
+
+        modelBuilder.Entity<Contract>()
+                    .HasOne(c => c.Property)
+                    .WithMany()
+                    .HasForeignKey(c => c.PropertyId);
+        modelBuilder.Entity<Invoice>()
+                    .HasOne(i => i.Property)
+                    .WithMany()
+                    .HasForeignKey(i => i.PropertyId);
+        modelBuilder.Entity<Invoice>()
+                    .HasOne(i => i.Provider)
+                    .WithMany()
+                    .HasForeignKey(i => i.ProviderId)
+                    .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Invoice>()
+                    .Property(i => i.Amount)
+                    .HasPrecision(18, 2);
 
         modelBuilder.Entity<City>().HasData(
             new City { Id = 1, Name = "Budapest" },
