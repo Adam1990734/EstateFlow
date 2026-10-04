@@ -20,6 +20,28 @@ public class EstateFlowDbContext : DbContext
                     .HasIndex(p => p.Code)
                     .IsUnique();
 
+        modelBuilder.Entity<Meter>()
+                    .HasOne(m => m.UtilityType)
+                    .WithMany()
+                    .HasForeignKey(m => m.UtilityTypeId)
+                    .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<Provider>()
+                    .HasOne(p => p.UtilityType)
+                    .WithMany(t => t.Providers)
+                    .HasForeignKey(p => p.UtilityTypeId)
+                    .OnDelete(DeleteBehavior.Restrict);
+        modelBuilder.Entity<MeterReading>()
+                    .HasOne(r => r.Meter)
+                    .WithMany(m => m.Readings)
+                    .HasForeignKey(r => r.MeterId)
+                    .OnDelete(DeleteBehavior.Cascade);
+        modelBuilder.Entity<Rental>()
+                    .Property(r => r.MonthlyRent)
+                    .HasPrecision(18, 2);
+        modelBuilder.Entity<MeterReading>()
+                    .Property(r => r.Value)
+                    .HasPrecision(18, 3);
+
         modelBuilder.Entity<City>().HasData(
             new City { Id = 1, Name = "Budapest" },
             new City { Id = 2, Name = "Debrecen" },
@@ -92,43 +114,13 @@ public class EstateFlowDbContext : DbContext
                 PropertyId = new Guid("9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d")
             }
         );
-        modelBuilder.Entity<Meter>()
-                    .HasOne(m => m.UtilityType)
-                    .WithMany()
-                    .HasForeignKey(m => m.UtilityTypeId)
-                    .OnDelete(DeleteBehavior.Restrict);
-        modelBuilder.Entity<Meter>()
-                    .HasOne(m => m.Provider)
-                    .WithMany()
-                    .HasForeignKey(m => m.ProviderId)
-                    .OnDelete(DeleteBehavior.Restrict);
-        modelBuilder.Entity<Provider>()
-        .HasOne(p => p.UtilityType)
-        .WithMany(t => t.Providers)
-        .HasForeignKey(p => p.UtilityTypeId)
-        .OnDelete(DeleteBehavior.Restrict);
-        modelBuilder.Entity<MeterReading>()
-                    .HasOne(r => r.Meter)
-                    .WithMany(m => m.Readings)
-                    .HasForeignKey(r => r.MeterId)
-                    .OnDelete(DeleteBehavior.Cascade);
-        modelBuilder.Entity<Rental>()
-                    .Property(r => r.MonthlyRent)
-                    .HasPrecision(18, 2);
-        modelBuilder.Entity<MeterReading>()
-                    .Property(r => r.Value)
-                    .HasPrecision(18, 3);
-        modelBuilder.Entity<City>().HasData(
-                    new City { Id = 1, Name = "Budapest" },
-                    new City { Id = 2, Name = "Debrecen" },
-                    new City { Id = 3, Name = "Szeged" },
-                    new City { Id = 4, Name = "Kecskemét" }
-                    );
+
         modelBuilder.Entity<UtilityType>().HasData(
             new UtilityType { Id = 1, Name = "Electricity" },
             new UtilityType { Id = 2, Name = "Gas" },
             new UtilityType { Id = 3, Name = "Water" }
         );
+
         modelBuilder.Entity<Provider>().HasData(
             new Provider { Id = 1, Name = "MVM Next", Note = null, UtilityTypeId = 1 },
             new Provider
@@ -140,6 +132,7 @@ public class EstateFlowDbContext : DbContext
             new Provider { Id = 3, Name = "Fővárosi Vízművek", Note = null, UtilityTypeId = 3 },
             new Provider { Id = 4, Name = "Debreceni Vízmű", Note = null, UtilityTypeId = 3 }
         );
+
         modelBuilder.Entity<Meter>().HasData(
             new Meter
             {
@@ -202,6 +195,7 @@ public class EstateFlowDbContext : DbContext
                 ProviderId = 4
             }
         );
+
         modelBuilder.Entity<MeterReading>().HasData(
             new MeterReading
             {
@@ -264,6 +258,7 @@ public class EstateFlowDbContext : DbContext
                 MeterId = new Guid("3f2504e0-4f89-41d3-9a0c-0305e82c3303")
             }
         );
+
         modelBuilder.Entity<Tenant>().HasData(
             new Tenant
             {
@@ -282,6 +277,7 @@ public class EstateFlowDbContext : DbContext
                 PhoneNumber = null
             }
         );
+
         modelBuilder.Entity<Rental>().HasData(
             new Rental
             {
